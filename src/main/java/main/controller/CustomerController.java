@@ -70,11 +70,13 @@ public class CustomerController extends Utils{
 
         Customer updatingCustomer = customerDAO.getCustomerById(customer.getCustomer_id());
 
-        ;
-
-
         Object customerTemp = Utils.prepareUpdateObject(Utils.findUpdatedFields(customer),customer,updatingCustomer);
-        customerDAO.saveCustomer((Customer) customerTemp);
+        int addresId = ((Customer) customerTemp).getAddress_id();
+        if(addresId!=0)
+        {
+            ((Customer) customerTemp).setAddress(addressDAO.getAddressById(addresId));
+        }
+        customerDAO.saveCustomer((Customer)customerTemp);
 
         return ResponseEntity.ok("User updated");
     }
