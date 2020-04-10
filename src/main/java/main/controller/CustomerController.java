@@ -7,16 +7,11 @@ import main.model.Address;
 import main.model.Customer;
 import main.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -42,8 +37,14 @@ public class CustomerController extends Utils{
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getCustomerbyId(@PathVariable int customerId)
     {
-        customerDAO.getCustomerById(customerId);
-        return ResponseEntity.ok().body(customerDAO.getCustomerById(customerId));
+        Customer cust = customerDAO.getCustomerById(customerId);
+
+        if(cust == null)
+        {
+            throw new NotFoundException("Customer id not found"+customerId);
+        }
+
+        return ResponseEntity.ok().body(cust);
     }
 
     @PostMapping("/customer")
@@ -51,6 +52,10 @@ public class CustomerController extends Utils{
     {
 
         Address address = addressDAO.getAddressById(customer.getAddress_id());
+        if(address == null)
+        {
+            throw new NotFoundException("Bad address - not found"+customer.getAddress_id());
+        }
         customer.setAddress(address);
         customerDAO.saveCustomer(customer);
         return ResponseEntity.ok().body("User Added");
@@ -59,6 +64,11 @@ public class CustomerController extends Utils{
     @DeleteMapping("/customer/{customerId}")
     public ResponseEntity<?> deleteCustomer(@PathVariable int customerId)
     {
+        Customer cust = customerDAO.getCustomerById(customerId);
+        if(cust == null)
+        {
+            throw new NotFoundException("Customer doesnt exist!");
+        }
         customerDAO.deleteCustomer(customerId);
         return ResponseEntity.ok("User deleted");
     }
@@ -70,11 +80,20 @@ public class CustomerController extends Utils{
 
         Customer updatingCustomer = customerDAO.getCustomerById(customer.getCustomer_id());
 
+        if(updatingCustomer == null)
+        {
+            throw new NotFoundException("Customer doesnt exist!");
+        }
+
         Object customerTemp = Utils.prepareUpdateObject(Utils.findUpdatedFields(customer),customer,updatingCustomer);
         int addresId = ((Customer) customerTemp).getAddress_id();
         if(addresId!=0)
         {
             ((Customer) customerTemp).setAddress(addressDAO.getAddressById(addresId));
+            if(((Customer) customerTemp).getAddress() == null)
+            {
+                throw new NotFoundException("Address doesnt exist !");
+            }
         }
         customerDAO.saveCustomer((Customer)customerTemp);
 
