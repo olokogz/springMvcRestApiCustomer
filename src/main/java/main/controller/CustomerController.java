@@ -3,8 +3,9 @@ package main.controller;
 
 import main.dao.AddressDAO;
 import main.dao.CustomerDAO;
-import main.model.Address;
-import main.model.Customer;
+import main.model.entity.Address;
+import main.model.entity.Customer;
+import main.model.filters.CustomerSearch;
 import main.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -76,8 +78,6 @@ public class CustomerController extends Utils{
     @PutMapping("/customer")
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) throws NoSuchFieldException, IllegalAccessException, IntrospectionException, InvocationTargetException {
 
-        LOGGER.severe("Addres: "+customer.getAddress());
-
         Customer updatingCustomer = customerDAO.getCustomerById(customer.getCustomer_id());
 
         if(updatingCustomer == null)
@@ -98,6 +98,16 @@ public class CustomerController extends Utils{
         customerDAO.saveCustomer((Customer)customerTemp);
 
         return ResponseEntity.ok("User updated");
+    }
+
+    @GetMapping("/customer/filter")
+    public ResponseEntity<?> filterCustomers(@RequestBody CustomerSearch customerSearch)
+    {
+        Map<String,Object> map = Utils.findUpdatedFields(customerSearch);
+
+        map.entrySet().forEach(System.out::println);
+
+        return ResponseEntity.ok().body(customerDAO.filterCustomer(map));
     }
 
 }

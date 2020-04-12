@@ -1,17 +1,12 @@
 package main.utils;
 
-import main.model.Address;
-import main.model.Customer;
-
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Utils {
     private static final Logger LOGGER = Logger.getLogger(Utils.class.toString());

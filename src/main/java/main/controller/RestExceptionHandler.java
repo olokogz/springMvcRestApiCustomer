@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @ControllerAdvice
 public class RestExceptionHandler {
+
+    @FunctionalInterface
+    interface ErrorList{
+        public String getErrors(StackTraceElement[] stack);
+    }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handlerNotFoundException(NotFoundException exc)
@@ -24,8 +31,15 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handlerGeneralException(Exception exc)
     {
+        ErrorList err = x -> {
+            StringBuilder sb = new StringBuilder();
+            List<StackTraceElement> stack = Arrays.asList(x);
+            stack.forEach(y->sb.append(y.toString()));
+            return sb.toString();
+
+        };
         ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
-                exc.getMessage(),
+               exc.getMessage()+"\n"+err.getErrors(exc.getStackTrace()),
                 LocalDateTime.now());
 
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);

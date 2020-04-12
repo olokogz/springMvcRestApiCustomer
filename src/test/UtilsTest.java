@@ -1,5 +1,6 @@
 
-import main.model.Address;
+import main.model.entity.Address;
+
 
 import main.utils.Utils;
 import org.junit.jupiter.api.Assertions;
@@ -20,6 +21,7 @@ public class UtilsTest {
     {
         Address address = new Address("test",null,null,null,null, Timestamp.valueOf(LocalDateTime.now()));
          Assertions.assertEquals(2, Utils.findUpdatedFields(address).size());
+
     }
 
     @Test

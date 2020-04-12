@@ -1,6 +1,6 @@
 package main.dao;
 
-import main.model.Address;
+import main.model.entity.Address;
 
 public interface AddressDAO {
 

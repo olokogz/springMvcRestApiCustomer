@@ -1,8 +1,9 @@
 package main.dao;
 
-import main.model.Customer;
+import main.model.entity.Customer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomerDAO {
 
@@ -13,4 +14,6 @@ public interface CustomerDAO {
     public boolean saveCustomer(Customer customer);
 
     public void deleteCustomer(int customerId);
+
+    public List<Customer> filterCustomer(Map<String,Object> filterVal);
 }
