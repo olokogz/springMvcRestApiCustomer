@@ -1,4 +1,4 @@
-package main.controller;
+package main.controller.errors;
 
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package main.controller;
+package main.controller.errors;
 
 
 import org.springframework.http.HttpStatus;
