@@ -1,6 +1,7 @@
 package main.model.entity;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import main.model.FilmRental;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
@@ -41,7 +42,7 @@ public class Film {
     private Timestamp last_update;
 
     @Transient
-    private String isRented;
+    private FilmRental isRented;
 
     private String inventory_id;
 
@@ -94,7 +95,7 @@ public class Film {
     public Film() {
     }
 
-    public Film(int film_id, String title, String description, int release_year, int rental_duration, double rental_rate, double replacement_cost, String rating, Timestamp last_update, String isRented, String inventory_id, String[] special_features, String fulltext) {
+    public Film(int film_id, String title, String description, int release_year, int rental_duration, double rental_rate, double replacement_cost, String rating, Timestamp last_update, FilmRental isRented, String inventory_id, String[] special_features, String fulltext) {
         this.film_id = film_id;
         this.title = title;
         this.description = description;
@@ -236,15 +237,15 @@ public class Film {
         this.category = category;
     }
 
-    public String getIsRented() {
+    public FilmRental getIsRented() {
         if(getInventory_id()!=null)
         {
-            return "RENTED";
+            return FilmRental.RENTED;
         }
-        return "NOT RENTED";
+        return FilmRental.NOT_RENTED;
     }
 
-    public void setIsRented(String isRented) {
+    public void setIsRented(FilmRental isRented) {
         this.isRented = isRented;
     }
 

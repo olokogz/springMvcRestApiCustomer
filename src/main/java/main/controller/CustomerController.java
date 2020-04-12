@@ -106,8 +106,6 @@ public class CustomerController extends Utils{
     {
         Map<String,Object> map = Utils.findUpdatedFields(customerSearch);
 
-        map.entrySet().forEach(System.out::println);
-
         return ResponseEntity.ok().body(customerDAO.filterCustomer(map));
     }
 

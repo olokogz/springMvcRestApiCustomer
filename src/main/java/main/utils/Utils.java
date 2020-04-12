@@ -27,6 +27,7 @@ public class Utils {
         Map<String, Object> result = map.entrySet()
                 .stream()
                 .filter(x->x.getValue() instanceof Integer ? (Integer) x.getValue()!=0 : x.getValue() != null)
+                .filter(x-> !(x.getValue() instanceof Double) || (Double) x.getValue() != 0.0)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         return result;
 
