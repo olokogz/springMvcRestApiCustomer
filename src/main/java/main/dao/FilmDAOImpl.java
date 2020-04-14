@@ -2,14 +2,18 @@ package main.dao;
 
 
 import main.model.FilmRental;
-import main.model.entity.Film;
+import main.model.entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManager;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.transaction.TransactionManager;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,4 +63,61 @@ public class FilmDAOImpl implements FilmDAO{
 
         return query.getResultList();
     }
+
+    @Override
+    public void deleteFilm(int film_id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        session.delete(session.get(Film.class,film_id));
+    }
+
+    @Override
+    public void addFilm(Film film) {
+
+        Session session = sessionFactory.getCurrentSession();
+        film.setLanguage(session.get(Language.class,film.getLanguage_id()));
+
+        for(int i=0;i<film.getCategory_id().length;i++)
+        {
+            film.addCategory(session.get(Category.class,film.getCategory_id()[i]));
+        }
+        for(int i=0;i<film.getActor_id().length;i++)
+        {
+            film.addActor(session.get(Actor.class,film.getActor_id()[i]));
+        }
+
+
+
+        session.saveOrUpdate(film);
+    }
+
+    @Override
+    public Film getFilmById(int film_id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        return session.get(Film.class,film_id);
+    }
+
+    @Override
+    public void rentFilm(int film_id, int inventory_id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Film film = session.get(Film.class,film_id);
+
+        film.setInventory_id(inventory_id);
+
+        session.update(film);
+    }
+
+    @Override
+    public void backFilm(int film_id, int inventory_id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Film film = session.get(Film.class,film_id);
+
+        film.setInventory_id(null);
+
+        session.update(film);
+    }
+
 }

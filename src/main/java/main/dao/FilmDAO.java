@@ -14,4 +14,14 @@ public interface FilmDAO {
     public List<Film> getRentedFilms(List<Film> filmList);
 
     public List<Film> filterFilms(Map<String,Object> filterMap);
+
+    public void deleteFilm(int film_id);
+
+    public void addFilm(Film film);
+
+    public Film getFilmById(int film_id);
+
+    public void rentFilm(int film_id, int inventory_id);
+
+    public void backFilm(int film_id, int inventory_id);
 }

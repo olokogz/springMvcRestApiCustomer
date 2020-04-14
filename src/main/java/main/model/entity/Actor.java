@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -21,21 +22,6 @@ public class Actor {
     private String last_name;
 
     private Timestamp last_update;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER,
-    cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
-    @JoinTable(
-            name="film_actor",
-            joinColumns = @JoinColumn(name="actor_id"),
-            inverseJoinColumns = @JoinColumn(name = "film_id")
-    )
-    private List<Film> filmList;
 
     public Actor() {
     }
@@ -78,21 +64,21 @@ public class Actor {
         this.last_update = last_update;
     }
 
-    public List<Film> getFilmList() {
-        return filmList;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Actor actor = (Actor) o;
+        return actor_id == actor.actor_id &&
+                Objects.equals(first_name, actor.first_name) &&
+                Objects.equals(last_name, actor.last_name) &&
+                Objects.equals(last_update, actor.last_update);// &&
+                //Objects.equals(filmList, actor.filmList);
     }
 
-    public void setFilmList(List<Film> filmList) {
-        this.filmList = filmList;
-    }
-
-    public void addFilm(Film film)
-    {
-        if(filmList == null)
-        {
-            filmList = new ArrayList<>();
-        }
-        filmList.add(film);
+    @Override
+    public int hashCode() {
+        return Objects.hash(actor_id, first_name, last_name, last_update);
     }
 
     @Override

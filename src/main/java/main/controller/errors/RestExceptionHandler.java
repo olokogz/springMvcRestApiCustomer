@@ -31,15 +31,9 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handlerGeneralException(Exception exc)
     {
-        ErrorList err = x -> {
-            StringBuilder sb = new StringBuilder();
-            List<StackTraceElement> stack = Arrays.asList(x);
-            stack.forEach(y->sb.append(y.toString()));
-            return sb.toString();
-
-        };
+        exc.printStackTrace();
         ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
-               exc.getMessage()+"\n"+err.getErrors(exc.getStackTrace()),
+               exc.getMessage(),
                 LocalDateTime.now());
 
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);

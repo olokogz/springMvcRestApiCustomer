@@ -18,17 +18,6 @@ public class Language {
 
     private Timestamp last_update;
 
-    @JsonIgnore
-    @OneToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    },
-            fetch = FetchType.EAGER,
-    mappedBy = "language")
-    private List<Film> film;
-
     public Language() {
     }
 
@@ -60,14 +49,6 @@ public class Language {
 
     public void setLast_update(Timestamp last_update) {
         this.last_update = last_update;
-    }
-
-    public List<Film> getFilm() {
-        return film;
-    }
-
-    public void setFilm(List<Film> film) {
-        this.film = film;
     }
 
     @Override

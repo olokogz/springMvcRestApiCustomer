@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,23 @@ public class Address implements Serializable {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public Set<Store> getStore() {
+        return store;
+    }
+
+    public void setStore(Set<Store> store) {
+        this.store = store;
+    }
+
+    public void addStore(Store store)
+    {
+        if(this.store == null)
+        {
+            this.store = new HashSet<>();
+        }
+        this.store.add(store);
     }
 
     @Override

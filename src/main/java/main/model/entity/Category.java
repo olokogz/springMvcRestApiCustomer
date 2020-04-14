@@ -19,21 +19,6 @@ public class Category {
 
     private Timestamp last_update;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.DETACH,
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST,
-                    CascadeType.REFRESH
-            })
-    @JoinTable(
-            name = "film_category",
-            joinColumns = @JoinColumn(name="film_id"),
-            inverseJoinColumns = @JoinColumn(name="category_id")
-    )
-    private List<Film> film;
-
     public Category() {
     }
 
@@ -67,14 +52,6 @@ public class Category {
         this.last_update = last_update;
     }
 
-    public List<Film> getFilm() {
-        return film;
-    }
-
-    public void setFilm(List<Film> film) {
-        this.film = film;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,13 +59,12 @@ public class Category {
         Category category = (Category) o;
         return category_id == category.category_id &&
                 Objects.equals(name, category.name) &&
-                Objects.equals(last_update, category.last_update) &&
-                Objects.equals(film, category.film);
+                Objects.equals(last_update, category.last_update);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(category_id, name, last_update, film);
+        return Objects.hash(category_id, name, last_update);
     }
 
     @Override
