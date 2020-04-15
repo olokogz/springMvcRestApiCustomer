@@ -5,9 +5,7 @@ import main.model.entity.Film;
 import java.util.List;
 import java.util.Map;
 
-public interface FilmDAO {
-
-    public List<Film> getFilms();
+public interface FilmDAO extends BasicOperationDAO{
 
     public List<Film> getNotRentedFilms(List<Film> filmList);
 
@@ -18,8 +16,6 @@ public interface FilmDAO {
     public void deleteFilm(int film_id);
 
     public void addFilm(Film film);
-
-    public Film getFilmById(int film_id);
 
     public void rentFilm(int film_id, int inventory_id);
 

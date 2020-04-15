@@ -49,7 +49,6 @@ public class Utils {
         {
             f1.setAccessible(true);
             Object o = f1.get(newObject);
-            System.out.println("value: "+o);
         }
 
         return newObject;

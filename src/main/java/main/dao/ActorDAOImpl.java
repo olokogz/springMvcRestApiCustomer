@@ -1,19 +1,18 @@
 package main.dao;
 
-import main.model.entity.Address;
+import main.model.entity.Actor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-
-@Component
+@Repository
 @Transactional
-public class AddressDAOImpl implements AddressDAO{
+public class ActorDAOImpl implements ActorDAO{
 
     @Autowired
     SessionFactory sessionFactory;
@@ -22,17 +21,14 @@ public class AddressDAOImpl implements AddressDAO{
     public Object getObjectById(int objectId) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query<Address> query = session.createQuery("from Address where address_id=:addressId");
-        query.setParameter("addressId",objectId);
-
-        return query.getSingleResult();
+        return session.get(Actor.class,objectId);
     }
 
     @Override
     public List<?> getObjectList() {
         Session session = sessionFactory.getCurrentSession();
 
-        Query<Address> query = session.createQuery("from Address",Address.class);
+        Query<Actor> query = session.createQuery("from Actor",Actor.class);
 
         return query.getResultList();
     }

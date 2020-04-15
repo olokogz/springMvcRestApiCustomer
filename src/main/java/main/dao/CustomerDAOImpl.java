@@ -18,24 +18,6 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Autowired
     SessionFactory sessionFactory;
 
-    @Override
-    public List<Customer> getCustomers() {
-        Session session = sessionFactory.getCurrentSession();
-
-        Query<Customer> query = session.createQuery("From Customer",Customer.class);
-
-        return query.getResultList();
-    }
-
-    @Override
-    public Customer getCustomerById(int customerId) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Query<Customer> query = session.createQuery("from Customer where customer_id=:customerId");
-        query.setParameter("customerId",customerId);
-
-        return query.getSingleResult();
-    }
 
     @Override
     public boolean saveCustomer(Customer customer) {
@@ -47,7 +29,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public void deleteCustomer(int customerId) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(getCustomerById(customerId));
+        session.delete(getObjectById(customerId));
     }
 
     @Override
@@ -62,5 +44,24 @@ public class CustomerDAOImpl implements CustomerDAO {
         System.out.println(query.getQueryString());
         return query.getResultList();
 
+    }
+
+    @Override
+    public Object getObjectById(int objectId) {
+
+        Session session = sessionFactory.getCurrentSession();
+        Query<Customer> query = session.createQuery("from Customer where customer_id=:customerId");
+        query.setParameter("customerId",objectId);
+
+        return query.getSingleResult();
+    }
+
+    @Override
+    public List<?> getObjectList() {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query<Customer> query = session.createQuery("From Customer",Customer.class);
+
+        return query.getResultList();
     }
 }

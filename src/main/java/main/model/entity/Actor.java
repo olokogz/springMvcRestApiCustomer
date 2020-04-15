@@ -73,7 +73,6 @@ public class Actor {
                 Objects.equals(first_name, actor.first_name) &&
                 Objects.equals(last_name, actor.last_name) &&
                 Objects.equals(last_update, actor.last_update);// &&
-                //Objects.equals(filmList, actor.filmList);
     }
 
     @Override

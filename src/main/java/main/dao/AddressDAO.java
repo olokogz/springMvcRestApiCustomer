@@ -2,7 +2,6 @@ package main.dao;
 
 import main.model.entity.Address;
 
-public interface AddressDAO {
+public interface AddressDAO extends BasicOperationDAO{
 
-    public Address getAddressById(int addressId);
 }

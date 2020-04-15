@@ -32,54 +32,52 @@ public class CustomerController extends Utils{
     @GetMapping("/customer")
     public ResponseEntity<?> getCustomers()
     {
-        customerDAO.getCustomers().forEach(x->LOGGER.severe(x.toString()));
-
-        return ResponseEntity.ok().body(customerDAO.getCustomers());
+        return ResponseEntity.ok().body(customerDAO.getObjectList());
     }
 
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getCustomerbyId(@PathVariable int customerId)
     {
-        Customer cust = customerDAO.getCustomerById(customerId);
+        Object cust = customerDAO.getObjectById(customerId);
 
         if(cust == null)
         {
-            throw new NotFoundException("Customer id not found"+customerId);
+            throw new NotFoundException("Customer id not found "+customerId);
         }
 
-        return ResponseEntity.ok().body(cust);
+        return ResponseEntity.ok().body((Customer)cust);
     }
 
     @PostMapping("/customer")
     public ResponseEntity<?> addCustomer(@RequestBody Customer customer)
     {
 
-        Address address = addressDAO.getAddressById(customer.getAddress_id());
+        Object address = addressDAO.getObjectById(customer.getAddress_id());
         if(address == null)
         {
             throw new NotFoundException("Bad address - not found"+customer.getAddress_id());
         }
-        customer.setAddress(address);
+        customer.setAddress((Address)address);
         customerDAO.saveCustomer(customer);
-        return ResponseEntity.ok().body("User Added");
+        return ResponseEntity.ok().body("User Added id: "+customer.getCustomer_id());
     }
 
     @DeleteMapping("/customer/{customerId}")
     public ResponseEntity<?> deleteCustomer(@PathVariable int customerId)
     {
-        Customer cust = customerDAO.getCustomerById(customerId);
+        Object cust = customerDAO.getObjectById(customerId);
         if(cust == null)
         {
             throw new NotFoundException("Customer doesnt exist!");
         }
         customerDAO.deleteCustomer(customerId);
-        return ResponseEntity.ok("User deleted");
+        return ResponseEntity.ok("User deleted id: "+((Customer)cust).getCustomer_id());
     }
 
     @PutMapping("/customer")
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) throws NoSuchFieldException, IllegalAccessException, IntrospectionException, InvocationTargetException {
 
-        Customer updatingCustomer = customerDAO.getCustomerById(customer.getCustomer_id());
+        Object updatingCustomer = customerDAO.getObjectById(customer.getCustomer_id());
 
         if(updatingCustomer == null)
         {
@@ -90,7 +88,7 @@ public class CustomerController extends Utils{
         int addresId = ((Customer) customerTemp).getAddress_id();
         if(addresId!=0)
         {
-            ((Customer) customerTemp).setAddress(addressDAO.getAddressById(addresId));
+            ((Customer) customerTemp).setAddress((Address)addressDAO.getObjectById(addresId));
             if(((Customer) customerTemp).getAddress() == null)
             {
                 throw new NotFoundException("Address doesnt exist !");
@@ -98,7 +96,7 @@ public class CustomerController extends Utils{
         }
         customerDAO.saveCustomer((Customer)customerTemp);
 
-        return ResponseEntity.ok("User updated");
+        return ResponseEntity.ok("User updated id: "+((Customer) customerTemp).getCustomer_id());
     }
 
     @GetMapping("/customer/filter")

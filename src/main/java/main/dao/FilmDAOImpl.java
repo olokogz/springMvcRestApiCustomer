@@ -25,14 +25,6 @@ public class FilmDAOImpl implements FilmDAO{
     @Autowired
     SessionFactory sessionFactory;
 
-    @Override
-    public List<Film> getFilms() {
-        Session session = sessionFactory.getCurrentSession();
-
-        Query<Film> query = session.createQuery("from Film",Film.class);
-
-        return query.getResultList();
-    }
 
     @Override
     public List<Film> getNotRentedFilms(List<Film> filmList) {
@@ -75,27 +67,21 @@ public class FilmDAOImpl implements FilmDAO{
     public void addFilm(Film film) {
 
         Session session = sessionFactory.getCurrentSession();
+        if(film.getCategory_id()!=null && film.getActor_id()!=null && film.getLanguage_id()!=0) {
         film.setLanguage(session.get(Language.class,film.getLanguage_id()));
 
-        for(int i=0;i<film.getCategory_id().length;i++)
-        {
-            film.addCategory(session.get(Category.class,film.getCategory_id()[i]));
-        }
-        for(int i=0;i<film.getActor_id().length;i++)
-        {
-            film.addActor(session.get(Actor.class,film.getActor_id()[i]));
+
+            for (int i = 0; i < film.getCategory_id().length; i++) {
+                film.addCategory(session.get(Category.class, film.getCategory_id()[i]));
+            }
+            for (int i = 0; i < film.getActor_id().length; i++) {
+                film.addActor(session.get(Actor.class, film.getActor_id()[i]));
+            }
         }
 
 
 
         session.saveOrUpdate(film);
-    }
-
-    @Override
-    public Film getFilmById(int film_id) {
-        Session session = sessionFactory.getCurrentSession();
-
-        return session.get(Film.class,film_id);
     }
 
     @Override
@@ -120,4 +106,19 @@ public class FilmDAOImpl implements FilmDAO{
         session.update(film);
     }
 
+    @Override
+    public Object getObjectById(int objectId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        return session.get(Film.class,objectId);
+    }
+
+    @Override
+    public List<?> getObjectList() {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query<Film> query = session.createQuery("from Film",Film.class);
+
+        return query.getResultList();
+    }
 }
